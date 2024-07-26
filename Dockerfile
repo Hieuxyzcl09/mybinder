@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-# Cài đặt các gói cần thiết
+# Cài đặt các gói cần thiết và dependencies của Docker
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
@@ -11,13 +11,17 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
     gnupg \
-    lsb-release
+    lsb-release \
+    iptables \
+    libdevmapper1.02.1
 
 # Cài đặt Docker từ file .deb
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/dists/jammy/pool/stable/amd64/docker-ce_20.10.21~3-0~ubuntu-jammy_amd64.deb -o docker-ce.deb && \
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/dists/jammy/pool/stable/amd64/containerd.io_1.6.9-1_amd64.deb -o containerd.io.deb && \
     curl -fsSL https://download.docker.com/linux/ubuntu/dists/jammy/pool/stable/amd64/docker-ce-cli_20.10.21~3-0~ubuntu-jammy_amd64.deb -o docker-ce-cli.deb && \
-    curl -fsSL https://download.docker.com/linux/ubuntu/dists/jammy/pool/stable/amd64/containerd.io_1.6.9-1_amd64.deb -o containerd.io.deb && \
-    dpkg -i containerd.io.deb docker-ce-cli.deb docker-ce.deb && \
+    curl -fsSL https://download.docker.com/linux/ubuntu/dists/jammy/pool/stable/amd64/docker-ce_20.10.21~3-0~ubuntu-jammy_amd64.deb -o docker-ce.deb && \
+    dpkg -i containerd.io.deb && \
+    dpkg -i docker-ce-cli.deb && \
+    dpkg -i docker-ce.deb && \
     rm containerd.io.deb docker-ce-cli.deb docker-ce.deb
 
 # Cài đặt tmate từ file .deb
